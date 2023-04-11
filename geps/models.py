@@ -1,4 +1,5 @@
 from django.db import models
+from model_utils import Choices
 
 
 # Create your models here.
@@ -11,6 +12,20 @@ class Docente(models.Model):
     data_cadastro = models.DateTimeField()
     status = models.IntegerField(default=0)
 
+
+# Criando uma classe representando a disponibilidade dos Docentes
+
+class DisponibilidadeDocente(models.Model):
+    DiaSemana = Choices (
+            ('Segunda-Feira'), ('Terça-Feira'), ('Quarta-Feira'),('Quinta-Feira'),('Sexta-Feira')
+        )
+    Periodo = Choices (
+            ('Manhã'), ('Tarde'), ('Noite')
+        )
+    docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
+    diaSemana = models.CharField(max_length=20, choices=DiaSemana)
+    periodo = models.CharField(max_length=20, choices=Periodo)
+    
 
 class Instituicao(models.Model):
     nome = models.CharField(max_length=100)
@@ -26,3 +41,15 @@ class Instituicao(models.Model):
     email_responsavel = models.CharField(max_length=150, null=True)
     telefone_responsavel = models.CharField(max_length=20, null=True)
     senha = models.CharField(max_length=150, default='')
+
+# Criando uma classe que representa a Demanda por professores
+class Demanda(models.Model):
+    DiaSemana = Choices (
+            ('Segunda-Feira'), ('Terça-Feira'), ('Quarta-Feira'),('Quinta-Feira'),('Sexta-Feira')
+        )
+    Periodo = Choices (
+            ('Manhã'), ('Tarde'), ('Noite')
+        )
+    instituicao=models.ForeignKey(Instituicao, on_delete=models.CASCADE)
+    diaSemana = models.CharField(max_length=20, choices=DiaSemana)
+    periodo = models.CharField(max_length=20, choices=Periodo)
