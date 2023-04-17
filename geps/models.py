@@ -2,8 +2,9 @@ from django.db import models
 from model_utils import Choices
 
 
-# Create your models here.
+# Criando classe com campos de Docente
 class Docente(models.Model):
+    objects = None
     nome = models.CharField(max_length=100)
     email = models.CharField(max_length=150)
     senha = models.CharField(max_length=150)
@@ -14,8 +15,8 @@ class Docente(models.Model):
 
 
 # Criando uma classe representando a disponibilidade dos Docentes
-
 class DisponibilidadeDocente(models.Model):
+    objects = None
     DiaSemana = Choices (
             ('Segunda-Feira'), ('Terça-Feira'), ('Quarta-Feira'),('Quinta-Feira'),('Sexta-Feira')
         )
@@ -25,8 +26,9 @@ class DisponibilidadeDocente(models.Model):
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     diaSemana = models.CharField(max_length=20, choices=DiaSemana)
     periodo = models.CharField(max_length=20, choices=Periodo)
-    
 
+
+# Classe com dos campos da Instituição
 class Instituicao(models.Model):
     nome = models.CharField(max_length=100)
     endereco = models.CharField(max_length=200, null=True)
@@ -50,6 +52,6 @@ class Demanda(models.Model):
     Periodo = Choices (
             ('Manhã'), ('Tarde'), ('Noite')
         )
-    instituicao=models.ForeignKey(Instituicao, on_delete=models.CASCADE)
+    instituicao = models.ForeignKey(Instituicao, on_delete=models.CASCADE)
     diaSemana = models.CharField(max_length=20, choices=DiaSemana)
     periodo = models.CharField(max_length=20, choices=Periodo)
