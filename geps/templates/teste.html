@@ -1,0 +1,38 @@
+{% extends 'dashboard/home.html' %}
+{% load static %}
+{% block content %}
+<div class="form-2-container section-container section-container-gray-bg">
+  <div class="container">
+    <div class="row">
+      <div class="col form-2-box wow fadeInUp">
+        {% if msg %}
+        <div class="alert {{class}} mensagem mx-auto text-center">
+          {{msg}}
+        </div>
+        {% endif %}
+        <form action="/gravaBairrosDocente/" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-3">
+              <!-- Resultado da Pesquisa -->
+              <fieldset class="form-group p-2">
+                <legend class="w-auto px-2"><strong>Bairros</strong></legend>
+                <div class="form-group">
+                  <select multiple class="form-control" id="bairro" name="bairro">
+                    {% for bairro in bairros %}
+                    <option value="{{ bairro.id }}">{{ bairro.nome }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </fieldset>
+              <div class="col">
+                <button type="submit" class="btn btn-primary btn-customized">Gravar</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

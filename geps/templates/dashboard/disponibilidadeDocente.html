@@ -10,12 +10,12 @@
                         {{msg}}
                     </div>
                 {% endif %}
-                <form action="/pesquisaDocente/" method="post">
+                <form action="/disponivelDocente/" method="post">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-4">
                             <fieldset class="form-group p-2">
-                                <legend class="w-auto px-3"><strong>Pesquisa Docente</strong></legend>
+                                <legend class="w-auto px-3"><strong>Disponibilidade</strong></legend>
                                 <fieldset class="form-group border p-2 bg-white">
                                     <!-- Segunda-Feira -->
                                     <fieldset class="form-group border p-3">
@@ -78,7 +78,7 @@
                                         </div>
                                     </fieldset>
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary btn-customized">Pesquisar</button>
+                                        <button type="submit" class="btn btn-primary btn-customized">Gravar</button>
                                     </div>
                                 </fieldset>
                             </fieldset>
@@ -86,42 +86,18 @@
                         <div class="col-md-3">
                             <!-- Resultado da Pesquisa -->
                             <fieldset class="form-group p-2">
-                                <legend class="w-auto px-2"><strong>Resultado</strong></legend>
+                                <legend class="w-auto px-2"><strong>Bairros</strong></legend>
                                 <div class="form-group">
-                                    {% for dado in dados %}
-                                        <input type="submit" class="btnDocente btn btn-primary btn-customized" value='{{ dado.docente__nome }}' id='btnDocente'><br><br>
+                                    <select multiple class="form-control" id="bairro" name="bairro">
+                                    {% for bairro in bairros %}
+                                    <option value="{{ bairro.id }}">{{ bairro.nome }}</option>
                                     {% endfor %}
+                                    </select>
                                 </div>
                             </fieldset>
-                        </div>
-                        <div class="col-md-5">
-                </form>
-                <form action="/gravaStatusDocente/" method="post">
-                    {% csrf_token %}
-                            <!-- Dados do Docente -->
-                            <fieldset class="form-group p-2">
-                                <legend class="w-auto px-2"><strong>Dados do Docente</strong></legend>
-                                <div class="form-group">
-                                    <label for="nome-docente">Nome:</label>
-                                    <input type="text" class="form-control item" name="name" id="nome-docente" readonly>
-                                    <label for="email">Email:</label>
-                                    <input type="text" class="form-control item" name="email" id="email-docente" readonly>
-                                    <label for="telefone">Telefone:</label>
-                                    <input type="text" class="form-control item" name="telefone" id="tel-docente" readonly>
-                                    <label for="registro_funcional">Registro Funcional:</label>
-                                    <input type="text" class="form-control item" name="registro_funcional" id="reg-funcional" readonly>
-                                    <br><label style="text-align:center"><strong>Validação do Registro Funcional</strong></label><br>
-                                    <input type="radio" name="validacao" id="nao_validado" value="nao_validado">
-                                    <label for="nao_validado">Não Validado</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="radio" name="validacao" id="validado" value="validado">
-                                    <label for="validado">Validado</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="radio" name="validacao" id="bloqueado" value="bloqueado">
-                                    <label for="bloqueado">Bloqueado</label>
-                                </div>
-                                <div class="col">
-                                    <button type="submit" class="btnStsDocente btn btn-primary btn-customized">Gravar</button>
-                                </div>
-                            </fieldset>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary btn-customized">Gravar</button>
+                            </div>
                         </div>
                     </div>
                 </form>
