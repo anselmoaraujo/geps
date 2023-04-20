@@ -11,7 +11,8 @@ from django.db.models import Q, Count
 from django.template.loader import render_to_string
 from django.http import HttpResponse, JsonResponse
 
-from geps.models import Docente, Instituicao, Demanda, DisponibilidadeDocente
+from geps.models import Docente, Instituicao, Demanda, DisponibilidadeDocente, \
+                        Estado, Cidade, Bairro
 from geps.utils.funcoes import checkGroup, checkEmail
 
 
@@ -208,7 +209,7 @@ def validChangePassword(request):
         return render(request, 'loginUser.html', data)
 
 
-# Página de politica de privacidade
+# Página de Politica de Privacidade
 def policy(request):
     return render(request, 'policy.html')
 
@@ -220,14 +221,22 @@ def formPesquisaDocente(request):
     return render(request, 'dashboard/pesquisaDocente.html', data)
 
 
-# Busca dados no banco Docente
-def pesquisaDocente(request):
+# Pagina de Disponibilidade de Docentes
+def formDisponivelDocente(request):
     data = {}
-    data['instituicao'] = True                     # Envia parametro de grupo
-    if 'diaSemana' in request.POST:                # Verifica se algum check ou setado
+    data['instituicao'] = False
+    #return render(request, 'dashboard/disponibilidadeDocente.html', data)
+    return render(request, 'testo.html', data)
+
+
+# Busca dados no banco Docente
+def disponivelDocente(request):
+    data = {}
+    data['instituicao'] = False                    # Envia parametro de grupo
+    if 'diaSemana' in request.POST:                # Verifica se algum check foi setado
         dias = request.POST.getlist('diaSemana')   # Pega a lista com todos os checks
         data["checks"] = dias
-        # Verifica se algum check de segunda vou setado por periodo
+        # Verifica se algum check de segunda foi setado por periodo
         if 'seg_manha' in dias or 'seg_tarde' in dias or 'seg_noite' in dias:
             if 'seg_manha' in dias:
                 periodo_manha = Q(periodo__contains='Manhã')
@@ -244,7 +253,107 @@ def pesquisaDocente(request):
             segunda = Q(diaSemana__contains='Segunda-Feira') & (periodo_manha | periodo_tarde | periodo_noite)
         else:
             segunda = Q()
-        # Verifica se algum check de terça vou setado por periodo
+        # Verifica se algum check de terça foi setado por periodo
+        if 'ter_manha' in dias or 'ter_tarde' in dias or 'ter_noite' in dias:
+            if 'ter_manha' in dias:
+                periodo_manha = Q(periodo__contains='Manhã')
+            else:
+                periodo_manha = Q()
+            if 'ter_tarde' in dias:
+                periodo_tarde = Q(periodo__contains='Tarde')
+            else:
+                periodo_tarde = Q()
+            if 'ter_noite' in dias:
+                periodo_noite = Q(periodo__contains='Noite')
+            else:
+                periodo_noite = Q()
+            terca = Q(diaSemana__contains='Terca-Feira') & (periodo_manha | periodo_tarde | periodo_noite)
+        else:
+            terca = Q()
+        # Verifica se algum check de quarta vou setado por periodo
+        if 'qua_manha' in dias or 'qua_tarde' in dias or 'qua_noite' in dias:
+            if 'qua_manha' in dias:
+                periodo_manha = Q(periodo__contains='Manhã')
+            else:
+                periodo_manha = Q()
+            if 'qua_tarde' in dias:
+                periodo_tarde = Q(periodo__contains='Tarde')
+            else:
+                periodo_tarde = Q()
+            if 'qua_noite' in dias:
+                periodo_noite = Q(periodo__contains='Noite')
+            else:
+                periodo_noite = Q()
+            quarta = Q(diaSemana__contains='Quarta-Feira') & (periodo_manha | periodo_tarde | periodo_noite)
+        else:
+            quarta = Q()
+        # Verifica se algum check de quinta vou setado por periodo
+        if 'qui_manha' in dias or 'qui_tarde' in dias or 'qui_noite' in dias:
+            if 'qui_manha' in dias:
+                periodo_manha = Q(periodo__contains='Manhã')
+            else:
+                periodo_manha = Q()
+            if 'qui_tarde' in dias:
+                periodo_tarde = Q(periodo__contains='Tarde')
+            else:
+                periodo_tarde = Q()
+            if 'qui_noite' in dias:
+                periodo_noite = Q(periodo__contains='Noite')
+            else:
+                periodo_noite = Q()
+            quinta = Q(diaSemana__contains='Quinta-Feira') & (periodo_manha | periodo_tarde | periodo_noite)
+        else:
+            quinta = Q()
+        # Verifica se algum check de sexta vou setado por periodo
+        if 'sex_manha' in dias or 'sex_tarde' in dias or 'sex_noite' in dias:
+            if 'sex_manha' in dias:
+                periodo_manha = Q(periodo__contains='Manhã')
+            else:
+                periodo_manha = Q()
+            if 'sex_tarde' in dias:
+                periodo_tarde = Q(periodo__contains='Tarde')
+            else:
+                periodo_tarde = Q()
+            if 'sex_noite' in dias:
+                periodo_noite = Q(periodo__contains='Noite')
+            else:
+                periodo_noite = Q()
+            sexta = Q(diaSemana__contains='Sexta-Feira') & (periodo_manha | periodo_tarde | periodo_noite)
+        else:
+            sexta = Q()
+        # Busca no banco de acordo com os dados selecionados
+        filtro = DisponibilidadeDocente.objects.filter(
+            segunda | terca | quarta | quinta | sexta
+        ).values('docente__nome').annotate(Count('docente_id'))
+        data['dados'] = filtro
+    return render(request, 'dashboard/disponibilidadeDocente.html', data)
+
+
+# Busca dados no banco Docente
+def pesquisaDocente(request):
+    data = {}
+    data['instituicao'] = True                     # Envia parametro de grupo
+    if 'diaSemana' in request.POST:                # Verifica se algum check foi setado
+        dias = request.POST.getlist('diaSemana')   # Pega a lista com todos os checks
+        data["checks"] = dias
+        # Verifica se algum check de segunda foi setado por periodo
+        if 'seg_manha' in dias or 'seg_tarde' in dias or 'seg_noite' in dias:
+            if 'seg_manha' in dias:
+                periodo_manha = Q(periodo__contains='Manhã')
+            else:
+                periodo_manha = Q()
+            if 'seg_tarde' in dias:
+                periodo_tarde = Q(periodo__contains='Tarde')
+            else:
+                periodo_tarde = Q()
+            if 'seg_noite' in dias:
+                periodo_noite = Q(periodo__contains='Noite')
+            else:
+                periodo_noite = Q()
+            segunda = Q(diaSemana__contains='Segunda-Feira') & (periodo_manha | periodo_tarde | periodo_noite)
+        else:
+            segunda = Q()
+        # Verifica se algum check de terça foi setado por periodo
         if 'ter_manha' in dias or 'ter_tarde' in dias or 'ter_noite' in dias:
             if 'ter_manha' in dias:
                 periodo_manha = Q(periodo__contains='Manhã')
@@ -335,7 +444,7 @@ def gravaStatusDocente(request):
         data = {}
         data['instituicao'] = True
         sts = 0
-        if request.POST['validacao'] == 'nao_validao':
+        if request.POST['validacao'] == 'nao_validado':
             sts = 0
         elif request.POST['validacao'] == 'validado':
             sts = 1
@@ -346,3 +455,23 @@ def gravaStatusDocente(request):
         data['class'] = 'alert-success'
         return render(request, 'dashboard/pesquisaDocente.html', data)
 
+
+def my_view(request):
+    bairros = Bairro.objects.all
+    context = {'all_bairros': bairros}
+    return render(request, 'dashboard/disponibilidadeDocente.html', context)
+    #return render(request, 'testo.html', context)
+
+
+def gravaBairrosDocente(request):
+    if request.POST.get('bairros', False):
+        data = {}
+        data['instituicao'] = False
+        docente = Docente.objects.get(nome=request.POST['docente'])
+        bairros = request.POST.getlist('bairros')
+        for bairro in bairros:
+            bairro = Bairro.objects.get(nome=bairro)
+            docente.bairros.add(bairro)
+        data['msg'] = 'Bairros Gravados com sucesso!'
+        data['class'] = 'alert-success'
+        return render(request, 'teste.html', data)
