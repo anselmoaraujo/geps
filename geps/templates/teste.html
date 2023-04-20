@@ -19,7 +19,7 @@
                 <legend class="w-auto px-2"><strong>Bairros</strong></legend>
                 <div class="form-group">
                   <select multiple class="form-control" id="bairro" name="bairro">
-                    {% for bairro in bairros %}
+                    {% for bairro in all_bairros %}
                     <option value="{{ bairro.id }}">{{ bairro.nome }}</option>
                     {% endfor %}
                   </select>
