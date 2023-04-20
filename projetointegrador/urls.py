@@ -17,7 +17,10 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 
-from geps.views import home, cadUser, insertUser, loginUser, validLoginUser, dashboard, logouts, changePassword, validChangePassword, policy, cadInstituicao, insertInst, formPesquisaDocente, pesquisaDocente, buscaDocente, gravaStatusDocente
+from geps.views import home, cadUser, insertUser, loginUser, validLoginUser, \
+    dashboard, logouts, changePassword, validChangePassword, policy, cadInstituicao, \
+    insertInst, formPesquisaDocente, pesquisaDocente, buscaDocente, gravaStatusDocente, \
+    formDisponivelDocente, disponivelDocente, my_view, gravaBairrosDocente
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,5 +44,9 @@ urlpatterns = [
     path('formPesquisaDocente/', formPesquisaDocente),
     path('pesquisaDocente/', pesquisaDocente),
     path('buscaDocente', buscaDocente, name='buscaDocente'),
-    path('gravaStatusDocente/', gravaStatusDocente)
+    path('gravaStatusDocente/', gravaStatusDocente),
+    path('formDisponivelDocente/', formDisponivelDocente),
+    path('disponivelDocente/', disponivelDocente),
+    path('my_view/', my_view),
+    path('gravaBairrosDocente/', gravaBairrosDocente),
 ]
