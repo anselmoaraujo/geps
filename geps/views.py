@@ -225,8 +225,7 @@ def formPesquisaDocente(request):
 def formDisponivelDocente(request):
     data = {}
     data['instituicao'] = False
-    #return render(request, 'dashboard/disponibilidadeDocente.html', data)
-    return render(request, 'testo.html', data)
+    return render(request, 'dashboard/disponibilidadeDocente.html', data)
 
 
 # Busca dados no banco Docente
@@ -460,7 +459,6 @@ def my_view(request):
     bairros = Bairro.objects.all
     context = {'all_bairros': bairros}
     return render(request, 'dashboard/disponibilidadeDocente.html', context)
-    #return render(request, 'testo.html', context)
 
 
 def gravaBairrosDocente(request):
